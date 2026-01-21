@@ -14,6 +14,7 @@ import { InputNumberModule } from "primeng/inputnumber";
         <label for="quantity">Quantité</label>
         <p-inputNumber
           [(ngModel)]="createdItem().quantity"
+          [min]="1"
           name="quantity"
           required/>
       </div>
