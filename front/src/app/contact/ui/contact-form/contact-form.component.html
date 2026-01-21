@@ -1,0 +1,36 @@
+<h1 class="text-center">Formulaire de contact</h1>
+
+
+<div class="m-6">
+  <div [hidden]="!isMessageSent"
+    class="p-2 bg-green-100 mb-2 text-green-700 border-round">
+    <p>Demande de contact envoyée avec succès</p>
+  </div>
+  <form #form="ngForm" (ngSubmit)="onSave()">
+    <div class="form-field flex align-items-start gap-2 mb-3">
+      <label for="email">Email:</label>
+      <input pInputText
+      type="email"
+      id="email"
+      name="email"
+      ngModel
+      required
+      email
+      >
+    </div>
+    <div class="form-field flex flex-column gap-2 mb-3">
+      <label for="message">Message:</label>
+      <textarea pInputTextarea
+        name="message"
+        id="message"
+        rows="5"
+        cols="30"
+        maxlength="300"
+        ngModel
+        required></textarea>
+    </div>
+    <div class="flex justify-content-between mt-3">
+      <p-button type="submit" [disabled]="!form.valid" label="Envoyer" />
+    </div>
+  </form>
+</div>
