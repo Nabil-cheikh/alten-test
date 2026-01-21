@@ -1,7 +1,9 @@
 import { Component, OnInit, inject, signal } from "@angular/core";
+import { CartItem } from "app/cart/data-access/cart.model";
 import { CartService } from "app/cart/data-access/cart.service";
 import { Product } from "app/products/data-access/product.model";
 import { ProductsService } from "app/products/data-access/products.service";
+import { ProductCartFormComponent } from "app/products/ui/product-cart-form/product-cart-form.component";
 import { ProductFormComponent } from "app/products/ui/product-form/product-form.component";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
@@ -30,7 +32,7 @@ const emptyProduct: Product = {
   templateUrl: "./product-list.component.html",
   styleUrls: ["./product-list.component.scss"],
   standalone: true,
-  imports: [DataViewModule, CardModule, ButtonModule, DialogModule, ProductFormComponent],
+  imports: [DataViewModule, CardModule, ButtonModule, DialogModule, ProductFormComponent, ProductCartFormComponent],
 })
 export class ProductListComponent implements OnInit {
   private readonly productsService = inject(ProductsService);
@@ -39,6 +41,7 @@ export class ProductListComponent implements OnInit {
   public readonly products = this.productsService.products;
 
   public isDialogVisible = false;
+  public isCartDialogVisible = false;
   public isCreation = false;
   public readonly editedProduct = signal<Product>(emptyProduct);
 
@@ -63,7 +66,12 @@ export class ProductListComponent implements OnInit {
   }
 
   public onAddToCart(product: Product) {
-    this.cartService.addToCart(product);
+    this.isCartDialogVisible = true;
+    this.editedProduct.set(product)
+  }
+
+  public onSaveCart(item: CartItem) {
+    this.closeCartDialog();
   }
 
   public onSave(product: Product) {
@@ -77,6 +85,11 @@ export class ProductListComponent implements OnInit {
 
   public onCancel() {
     this.closeDialog();
+    this.closeCartDialog();
+  }
+
+  private closeCartDialog() {
+    this.isCartDialogVisible = false;
   }
 
   private closeDialog() {

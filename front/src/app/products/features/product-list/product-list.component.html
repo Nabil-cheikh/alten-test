@@ -31,3 +31,14 @@
         (cancel)="onCancel()"
     />
 </p-dialog>
+
+<p-dialog [(visible)]="isCartDialogVisible"
+  [style]="{ width: '50vw' }"
+  header="Ajout du produit dans le panier">
+  <app-product-cart-form
+    [product]="editedProduct()"
+    [quantity]="1"
+    (save)="onSaveCart($event)"
+    (cancel)="onCancel()"
+  />
+</p-dialog>

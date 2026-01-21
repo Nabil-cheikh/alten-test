@@ -10,34 +10,36 @@ export class CartService {
 
   public readonly productsInCart = this._productsInCart.asReadonly();
 
-  public addToCart(product: Product): void {
-    const existingItem = this._productsInCart().find(item => item.product.id === product.id);
+  public addToCart(item: CartItem): void {
+    const existingItem = this._productsInCart().find(i => i.product.id === item.product.id);
     // if the product is in the carts, iterate its quantity
     if (existingItem) {
       this._productsInCart.update(items => items.map(pc => {
-        if (pc.product.id === product.id)
-          return {product: pc.product, quantity: pc.quantity + 1};
+        if (pc.product.id === item.product.id)
+          return {product: pc.product, quantity: pc.quantity + item.quantity};
         else
           return pc;
       }))
     }
     // else, add a new element with this product and a quantity of 1
     else {
-      this._productsInCart.update(items => [...items, {product: product, quantity: 1}]);
+      this._productsInCart.update(items =>
+        [...items, {product: item.product, quantity: item.quantity}]
+      );
     }
   }
 
-  public removeFromCart(productCart: CartItem): void {
-    if (productCart.quantity === 1)
-      this._productsInCart.update(items => items.filter(pc =>
-        pc.product.id !== productCart.product.id
-      ))
-    else
-      this._productsInCart.update(items => items.map(pc => {
-        if (pc.product.id === productCart.product.id)
-          return {product: pc.product, quantity: pc.quantity - 1};
-        else
-          return pc;
-      }));
+  public removeFromCart(itemToRemove: CartItem): void {
+    this._productsInCart.update(items =>
+      items.
+        map(pc => {
+          if (pc.product.id !== itemToRemove.product.id) {
+            return pc;
+          }
+          const newQuantity = pc.quantity - itemToRemove.quantity;
+          return { ...pc, quantity: newQuantity };
+        })
+        .filter(pc => pc.quantity > 0)
+    )
   }
 }

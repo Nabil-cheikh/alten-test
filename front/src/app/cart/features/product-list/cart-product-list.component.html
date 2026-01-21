@@ -16,6 +16,16 @@
                 </ng-template>
       </p-card>
     }
-
   </ng-template>
 </p-dataView>
+
+<p-dialog [(visible)]="isRemovalDialogVisible"
+  [style]="{ width: '50vw' }"
+  header="Retirer un produit du panier">
+  @if (itemToRemove) {
+    <app-removal-dialog
+      [item]="itemToRemove"
+      (save)="onSave($event)"
+      (cancel)="onCancel()"/>
+  }
+</p-dialog>
