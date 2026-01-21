@@ -3,7 +3,7 @@ import { CartService } from "app/cart/data-access/cart.service";
 import { CardModule } from "primeng/card";
 import { ButtonModule } from "primeng/button";
 import { DataViewModule } from 'primeng/dataview';
-import { Product } from "app/products/data-access/product.model";
+import { CartItem } from "app/cart/data-access/cart.model";
 
 @Component({
   selector: "app-cart-product-list",
@@ -17,7 +17,7 @@ export class CartProductListComponent {
 
   public readonly cartProducts = this.cartService.productsInCart;
 
-  public onRemoveFromCart(product: Product) {
-    this.cartService.removeFromCart(product.id);
+  public onRemoveFromCart(item: CartItem) {
+    this.cartService.removeFromCart(item);
   }
 }

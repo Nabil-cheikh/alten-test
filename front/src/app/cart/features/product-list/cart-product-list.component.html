@@ -1,16 +1,17 @@
 <h1 class="text-center">Votre panier</h1>
 
 <p-dataView #dv [value]="cartProducts()">
-  <ng-template pTemplate="list" let-products>
-    @for (product of products; track product) {
+  <ng-template pTemplate="list" let-items>
+    @for (item of items; track item) {
       <p-card class="block mb-2">
-        <span class="font-medium text-secondary text-sm">{{ product.category }}</span>
-                <div class="text-lg font-medium text-900 mt-2">{{ product.name }} -- {{ product.price }}$</div>
-                <p class="text-sm text-500 mt-3 italic">{{ product.description }}</p>
+        <span class="font-medium text-secondary text-sm">{{ item.product.category }}</span>
+                <div class="text-lg font-medium text-900 mt-2">{{ item.product.name }} -- {{ item.product.price }}$</div>
+                <p class="text-sm text-500 mt-3 italic">{{ item.product.description }}</p>
+                <span>Quantité : {{ item.quantity }}</span>
 
                 <ng-template pTemplate="footer">
                     <div class="flex gap-3 mt-1">
-                        <p-button label="Supprimer du panier" severity="danger" (onClick)="onRemoveFromCart(product)" />
+                        <p-button label="Supprimer du panier" severity="danger" (onClick)="onRemoveFromCart(item)" />
                     </div>
                 </ng-template>
       </p-card>
