@@ -1,5 +1,101 @@
 <p-card header="Bienvenue" class="block m-2 text-center">
   <p class="m-0">
-      Bienvenue sur {{ appTitle }} !
+    Bienvenue sur {{ appTitle }} !
   </p>
 </p-card>
+
+@if (errorMessage()) {
+  <p-message severity="danger" [text]="errorMessage()!" class="block m-2"></p-message>
+}
+
+@if (successMessage()) {
+  <p-message severity="success" [text]="successMessage()!" class="block m-2"></p-message>
+}
+
+@if (isLoggedIn()) {
+  <p-card header="Connecté" class="block m-2">
+    <p>Vous êtes connecté.</p>
+    <p-button label="Se déconnecter" severity="secondary" (onClick)="onLogout()"></p-button>
+  </p-card>
+} @else {
+  <p-card class="block m-2">
+    <p-tabView>
+      <p-tabPanel header="Connexion">
+        <form #loginForm="ngForm" (ngSubmit)="onLogin()" class="flex flex-column gap-3">
+          <div class="flex flex-column gap-2">
+            <label for="loginEmail">Email</label>
+            <input pInputText
+                   id="loginEmail"
+                   type="email"
+                   [(ngModel)]="loginEmail"
+                   name="loginEmail"
+                   required
+                   email />
+          </div>
+          <div class="flex flex-column gap-2">
+            <label for="loginPassword">Mot de passe</label>
+            <p-password id="loginPassword"
+                        [(ngModel)]="loginPassword"
+                        name="loginPassword"
+                        [feedback]="false"
+                        [toggleMask]="true"
+                        required>
+            </p-password>
+          </div>
+          <p-button type="submit"
+                    label="Se connecter"
+                    [loading]="loading()"
+                    [disabled]="!loginForm.valid || loading()">
+          </p-button>
+        </form>
+      </p-tabPanel>
+
+      <p-tabPanel header="Inscription">
+        <form #registerForm="ngForm" (ngSubmit)="onRegister()" class="flex flex-column gap-3">
+          <div class="flex flex-column gap-2">
+            <label for="registerUsername">Nom d'utilisateur</label>
+            <input pInputText
+                   id="registerUsername"
+                   type="text"
+                   [(ngModel)]="registerUsername"
+                   name="registerUsername"
+                   required />
+          </div>
+          <div class="flex flex-column gap-2">
+            <label for="registerFirstname">Prénom</label>
+            <input pInputText
+                   id="registerFirstname"
+                   type="text"
+                   [(ngModel)]="registerFirstname"
+                   name="registerFirstname"
+                   required />
+          </div>
+          <div class="flex flex-column gap-2">
+            <label for="registerEmail">Email</label>
+            <input pInputText
+                   id="registerEmail"
+                   type="email"
+                   [(ngModel)]="registerEmail"
+                   name="registerEmail"
+                   required
+                   email />
+          </div>
+          <div class="flex flex-column gap-2">
+            <label for="registerPassword">Mot de passe</label>
+            <p-password id="registerPassword"
+                        [(ngModel)]="registerPassword"
+                        name="registerPassword"
+                        [toggleMask]="true"
+                        required>
+            </p-password>
+          </div>
+          <p-button type="submit"
+                    label="S'inscrire"
+                    [loading]="loading()"
+                    [disabled]="!registerForm.valid || loading()">
+          </p-button>
+        </form>
+      </p-tabPanel>
+    </p-tabView>
+  </p-card>
+}

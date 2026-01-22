@@ -21,5 +21,10 @@ export const APP_ROUTES: Routes = [
     loadChildren: () =>
       import("./contact/contact.routes").then((m) => m.CONTACT_ROUTES)
   },
+  {
+    path: "wishlist",
+    loadChildren: () =>
+      import("./wishlist/wishlist.routes").then((m) => m.WISHLIST_ROUTES)
+  },
   { path: "", redirectTo: "home", pathMatch: "full" },
 ];

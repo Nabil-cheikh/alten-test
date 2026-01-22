@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
               .body(Map.of("error", ex.getMessage()));
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, String>> handleRuntime(RuntimeException ex) {
       if (ex.getMessage().contains("Access denied")) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)

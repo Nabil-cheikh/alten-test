@@ -1,6 +1,8 @@
 <h1 class="text-center">Liste des produits</h1>
 
-<p-button label="Créer produit" (onClick)="onCreate()" class="block text-center"/>
+@if (isAdmin()) {
+  <p-button label="Créer produit" (onClick)="onCreate()" class="block text-center"/>
+}
 
 <p-dataView #dv [value]="products()">
     <ng-template pTemplate="list" let-products>
@@ -13,8 +15,11 @@
                 <ng-template pTemplate="footer">
                     <div class="flex gap-3 mt-1">
                         <p-button label="Ajouter au panier" severity="primary" (onClick)="onAddToCart(product)"/>
-                        <p-button label="Modifier" severity="secondary" (onClick)="onUpdate(product)"/>
-                        <p-button label="Supprimer" severity="danger" (onClick)="onDelete(product)" />
+                        <p-button label="❤️" severity="help" (onClick)="onAddToWishlist(product)"/>
+                        @if (isAdmin()) {
+                          <p-button label="Modifier" severity="secondary" (onClick)="onUpdate(product)"/>
+                          <p-button label="Supprimer" severity="danger" (onClick)="onDelete(product)" />
+                        }
                     </div>
                 </ng-template>
             </p-card>
@@ -37,7 +42,6 @@
   header="Ajout du produit dans le panier">
   <app-product-cart-form
     [product]="editedProduct()"
-    [quantity]="1"
     (save)="onSaveCart($event)"
     (cancel)="onCancel()"
   />

@@ -31,6 +31,11 @@ import { MenuItem } from "primeng/api";
           routerLink: ['/cart']
         },
         {
+          label: 'Liste de souhaits',
+          icon: 'pi pi-heart',
+          routerLink: ['/wishlist']
+        },
+        {
           label: 'Contact',
           icon: 'pi pi-address-book',
           routerLink: ['/contact']

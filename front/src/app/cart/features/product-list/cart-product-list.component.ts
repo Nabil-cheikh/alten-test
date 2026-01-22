@@ -1,10 +1,10 @@
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { CartService } from "app/cart/data-access/cart.service";
 import { CardModule } from "primeng/card";
 import { ButtonModule } from "primeng/button";
 import { DataViewModule } from 'primeng/dataview';
-import { CartItem } from "app/cart/data-access/cart.model";
 import { DialogModule } from "primeng/dialog";
+import { CartItem } from "app/cart/data-access/cart.model";
 import { RemovalDialogComponent } from "app/cart/ui/removal-dialog/removal-dialog.component";
 
 @Component({
@@ -14,7 +14,7 @@ import { RemovalDialogComponent } from "app/cart/ui/removal-dialog/removal-dialo
   standalone: true,
   imports: [DataViewModule, CardModule, ButtonModule, DialogModule, RemovalDialogComponent]
 })
-export class CartProductListComponent {
+export class CartProductListComponent implements OnInit {
   private readonly cartService = inject(CartService);
 
   public readonly cartProducts = this.cartService.productsInCart;
@@ -22,13 +22,16 @@ export class CartProductListComponent {
   public isRemovalDialogVisible = false;
   public itemToRemove: CartItem | null = null;
 
+  ngOnInit() {
+    this.cartService.get().subscribe();
+  }
+
   public onRemoveFromCart(item: CartItem) {
-    // this.cartService.removeFromCart(item);
     this.itemToRemove = item;
     this.isRemovalDialogVisible = true;
   }
 
-  public onSave(item: CartItem) {
+  public onSave() {
     this.isRemovalDialogVisible = false;
     this.itemToRemove = null;
   }

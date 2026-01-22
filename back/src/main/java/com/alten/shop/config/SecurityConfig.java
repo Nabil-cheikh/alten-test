@@ -37,7 +37,7 @@ public class SecurityConfig {
       .authorizeHttpRequests(auth -> auth
               // Routes publiques
               .requestMatchers("/account", "/token").permitAll()
-              .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+              .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs.yaml", "/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
               .requestMatchers("/h2-console/**").permitAll()
               // GET products accessible à tous
               .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()

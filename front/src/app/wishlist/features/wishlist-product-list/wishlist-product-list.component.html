@@ -1,0 +1,23 @@
+<h1 class="text-center">Liste de souhaits</h1>
+
+@if (wishlistProducts().length === 0) {
+  <p class="text-center text-500">Votre liste de souhaits est vide.</p>
+}
+
+<p-dataView #dv [value]="wishlistProducts()">
+  <ng-template pTemplate="list" let-items>
+    @for (product of items; track product.id) {
+      <p-card class="block mb-2">
+        <span class="font-medium text-secondary text-sm">{{ product.category }}</span>
+        <div class="text-lg font-medium text-900 mt-2">{{ product.name }} -- {{ product.price }}$</div>
+        <p class="text-sm text-500 mt-3 italic">{{ product.description }}</p>
+
+        <ng-template pTemplate="footer">
+          <div class="flex gap-3 mt-1">
+            <p-button label="Retirer des souhaits" severity="danger" (onClick)="onRemoveFromWishlist(product.id)" />
+          </div>
+        </ng-template>
+      </p-card>
+    }
+  </ng-template>
+</p-dataView>

@@ -3,8 +3,9 @@ import { enableProdMode, importProvidersFrom } from "@angular/core";
 import { registerLocaleData } from "@angular/common";
 import {
   provideHttpClient,
-  withInterceptorsFromDi,
+  withInterceptors,
 } from "@angular/common/http";
+import { authInterceptor } from "app/shared/data-access/auth.interceptor";
 import localeFr from "@angular/common/locales/fr";
 import { BrowserModule, bootstrapApplication } from "@angular/platform-browser";
 import { provideAnimations } from "@angular/platform-browser/animations";
@@ -23,7 +24,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(BrowserModule),
     provideHttpClient(
-      withInterceptorsFromDi(),
+      withInterceptors([authInterceptor]),
     ),
     provideAnimations(),
     provideRouter(APP_ROUTES),

@@ -43,13 +43,13 @@ public class ProductController {
             @Valid @RequestBody CreateProductRequest request) {
       checkAdminAccess(user);
       Product product = new Product();
-      product.setCode(request.getCode());
+      product.setCode(request.getCode() != null ? request.getCode() : "PROD-" + System.currentTimeMillis());
       product.setName(request.getName());
       product.setDescription(request.getDescription());
       product.setImage(request.getImage());
       product.setCategory(request.getCategory());
       product.setPrice(request.getPrice());
-      product.setQuantity(request.getQuantity());
+      product.setQuantity(request.getQuantity() != null ? request.getQuantity() : 0);
       product.setInternalReference(request.getInternalReference());
       product.setShellId(request.getShellId());
       if (request.getInventoryStatus() != null) {

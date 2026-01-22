@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, inject, input, Output, ViewEncapsulation } from "@angular/core";
+import { Component, EventEmitter, inject, input, Output, signal, ViewEncapsulation } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { CartItem } from "app/cart/data-access/cart.model";
 import { CartService } from "app/cart/data-access/cart.service";
@@ -13,14 +13,14 @@ import { InputNumberModule } from "primeng/inputnumber";
       <div class="form-field">
         <label for="quantity">Quantité</label>
         <p-inputNumber
-          [(ngModel)]="createdItem().quantity"
+          [(ngModel)]="quantity"
           [min]="1"
           name="quantity"
           required/>
       </div>
       <div class="flex justify-content-between">
         <p-button type="button" (click)="onCancel()" label="Annuler" severity="help" />
-        <p-button type="submit" [disabled]="!form.valid" label="Enregistrer" severity="success" />
+        <p-button type="submit" [disabled]="!form.valid || loading()" [loading]="loading()" label="Enregistrer" severity="success" />
       </div>
     </form>
   `,
@@ -35,18 +35,29 @@ import { InputNumberModule } from "primeng/inputnumber";
 })
 export class ProductCartFormComponent {
   public readonly product = input.required<Product>();
-  public readonly quantity = input.required<number>();
 
   @Output() cancel = new EventEmitter<void>();
   @Output() save = new EventEmitter<CartItem>();
 
   private readonly cartService = inject(CartService);
 
-  public readonly createdItem = computed(() => ({ product: this.product(), quantity: this.quantity() }));
+  public quantity = 1;
+  public loading = signal(false);
 
   onSave() {
-    this.cartService.addToCart(this.createdItem());
-    this.save.emit(this.createdItem());
+    this.loading.set(true);
+    this.cartService.addToCart({
+      productId: this.product().id,
+      quantity: this.quantity
+    }).subscribe({
+      next: (item) => {
+        this.loading.set(false);
+        this.save.emit(item);
+      },
+      error: () => {
+        this.loading.set(false);
+      }
+    });
   }
 
   onCancel() {

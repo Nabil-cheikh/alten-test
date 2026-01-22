@@ -1,19 +1,23 @@
 <h1 class="text-center">Votre panier</h1>
 
+@if (cartProducts().length === 0) {
+  <p class="text-center text-500">Votre panier est vide.</p>
+}
+
 <p-dataView #dv [value]="cartProducts()">
   <ng-template pTemplate="list" let-items>
-    @for (item of items; track item) {
+    @for (item of items; track item.product.id) {
       <p-card class="block mb-2">
         <span class="font-medium text-secondary text-sm">{{ item.product.category }}</span>
-                <div class="text-lg font-medium text-900 mt-2">{{ item.product.name }} -- {{ item.product.price }}$</div>
-                <p class="text-sm text-500 mt-3 italic">{{ item.product.description }}</p>
-                <span>Quantité : {{ item.quantity }}</span>
+        <div class="text-lg font-medium text-900 mt-2">{{ item.product.name }} -- {{ item.product.price }}$</div>
+        <p class="text-sm text-500 mt-3 italic">{{ item.product.description }}</p>
+        <span>Quantité : {{ item.quantity }}</span>
 
-                <ng-template pTemplate="footer">
-                    <div class="flex gap-3 mt-1">
-                        <p-button label="Supprimer du panier" severity="danger" (onClick)="onRemoveFromCart(item)" />
-                    </div>
-                </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="flex gap-3 mt-1">
+            <p-button label="Supprimer du panier" severity="danger" (onClick)="onRemoveFromCart(item)" />
+          </div>
+        </ng-template>
       </p-card>
     }
   </ng-template>
@@ -25,7 +29,7 @@
   @if (itemToRemove) {
     <app-removal-dialog
       [item]="itemToRemove"
-      (save)="onSave($event)"
+      (save)="onSave()"
       (cancel)="onCancel()"/>
   }
 </p-dialog>

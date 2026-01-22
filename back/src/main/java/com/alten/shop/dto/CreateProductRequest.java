@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class CreateProductRequest {
 
-    @NotBlank
     private String code;
 
     @NotBlank
@@ -24,7 +23,6 @@ public class CreateProductRequest {
     @Positive
     private Double price;
 
-    @NotNull
     private Integer quantity;
 
     private String internalReference;
