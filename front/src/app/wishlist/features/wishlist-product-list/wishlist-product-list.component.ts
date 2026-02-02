@@ -3,6 +3,8 @@ import { WishlistService } from "app/wishlist/data-access/wishlist.service";
 import { CardModule } from "primeng/card";
 import { ButtonModule } from "primeng/button";
 import { DataViewModule } from 'primeng/dataview';
+import { MessageService } from "primeng/api";
+
 
 @Component({
   selector: "app-wishlist-product-list",
@@ -13,6 +15,7 @@ import { DataViewModule } from 'primeng/dataview';
 })
 export class WishlistProductListComponent implements OnInit {
   private readonly wishlistService = inject(WishlistService);
+  private readonly messageService = inject(MessageService);
 
   public readonly wishlistProducts = this.wishlistService.wishlistItems;
 
@@ -21,6 +24,12 @@ export class WishlistProductListComponent implements OnInit {
   }
 
   public onRemoveFromWishlist(productId: number) {
+    this.messageService.add({
+          severity: 'success',
+          summary: 'Ajouté',
+          detail: 'Produit retirer de vos souhaits.',
+          life: 3000
+    });
     this.wishlistService.removeFromWishlist(productId).subscribe();
   }
 }

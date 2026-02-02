@@ -130,6 +130,12 @@ export class ProductListComponent implements OnInit {
   }
 
   public onSaveCart(item: CartItem) {
+    this.messageService.add({
+          severity: 'success',
+          summary: 'Ajouté',
+          detail: 'Produit ajouté à votre panier.',
+          life: 3000
+    });
     this.closeCartDialog();
   }
 
