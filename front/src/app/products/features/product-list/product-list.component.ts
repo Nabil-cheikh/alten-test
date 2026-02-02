@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from "@angular/core";
+import { Component, OnInit, inject, signal, computed } from "@angular/core";
 import { Router } from "@angular/router";
 import { CartItem } from "app/cart/data-access/cart.model";
 import { CartService } from "app/cart/data-access/cart.service";
@@ -13,6 +13,8 @@ import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 
 const emptyProduct: Product = {
   id: 0,
@@ -36,7 +38,7 @@ const emptyProduct: Product = {
   templateUrl: "./product-list.component.html",
   styleUrls: ["./product-list.component.scss"],
   standalone: true,
-  imports: [DataViewModule, CardModule, ButtonModule, DialogModule, ProductFormComponent, ProductCartFormComponent],
+  imports: [DataViewModule, CardModule, ButtonModule, DialogModule, DropdownModule, FormsModule, ProductFormComponent, ProductCartFormComponent],
 })
 export class ProductListComponent implements OnInit {
   private readonly productsService = inject(ProductsService);
@@ -48,6 +50,21 @@ export class ProductListComponent implements OnInit {
 
   public readonly products = this.productsService.products;
   public readonly isAdmin = this.authService.isAdmin;
+
+  public readonly selectedCategory = signal<string | null>(null);
+
+  public readonly categories = computed(() => {
+    const allCategories = this.products().map(p => p.category);
+    return [...new Set(allCategories)].sort();
+  });
+
+  public readonly filteredProducts = computed(() => {
+    const category = this.selectedCategory();
+    if (!category) {
+      return this.products();
+    }
+    return this.products().filter(p => p.category === category);
+  });
 
   public isDialogVisible = false;
   public isCartDialogVisible = false;

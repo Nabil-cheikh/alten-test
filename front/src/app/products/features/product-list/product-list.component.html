@@ -1,10 +1,22 @@
 <h1 class="text-center">Liste des produits</h1>
 
+<div class="flex justify-content-center mb-3 gap-3 align-items-center">
+  <span>Filtrer par catégorie :</span>
+  <p-dropdown
+    [options]="categories()"
+    [ngModel]="selectedCategory()"
+    (ngModelChange)="selectedCategory.set($event)"
+    placeholder="Toutes les catégories"
+    [showClear]="true"
+    styleClass="w-15rem"
+  />
+</div>
+
 @if (isAdmin()) {
   <p-button label="Créer produit" (onClick)="onCreate()" class="block text-center"/>
 }
 
-<p-dataView #dv [value]="products()">
+<p-dataView #dv [value]="filteredProducts()" [paginator]="true" [rows]="20">
     <ng-template pTemplate="list" let-products>
         @for (product of products; track product) {
             <p-card class="block mb-2">

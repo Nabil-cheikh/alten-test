@@ -4,6 +4,8 @@ import com.alten.shop.dto.CreateProductRequest;
 import com.alten.shop.model.Product;
 import com.alten.shop.model.User;
 import com.alten.shop.service.ProductService;
+
+import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -58,6 +61,20 @@ public class ProductController {
       product.setRating(request.getRating());
       Product created = productService.create(product);
       return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @PostMapping("/batch")
+    public ResponseEntity<List<Product>> createProducts(
+      @AuthenticationPrincipal User user,
+      @Valid @RequestBody List<CreateProductRequest> requests
+    ) {
+      checkAdminAccess(user);
+      List<Product> createdProducts = new ArrayList<>();
+      for (CreateProductRequest request : requests) {
+        createdProducts.add(createProduct(user, request).getBody());
+      }
+
+      return ResponseEntity.status(HttpStatus.CREATED).body(createdProducts);
     }
 
     @PatchMapping("/{id}")
